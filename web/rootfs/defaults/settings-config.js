@@ -48,7 +48,7 @@
 {{ $DESKTOP_SHARING_FRAMERATE_MIN := .Env.DESKTOP_SHARING_FRAMERATE_MIN | default 5 -}}
 {{ $DESKTOP_SHARING_FRAMERATE_MAX := .Env.DESKTOP_SHARING_FRAMERATE_MAX | default 5 -}}
 {{ $XMPP_DOMAIN := .Env.XMPP_DOMAIN | default "meet.jitsi" -}}
-{{ $XMPP_RECORDER_DOMAIN := .Env.XMPP_RECORDER_DOMAIN | default "recorder.meet.jitsi" -}}
+{{ $XMPP_HIDDEN_DOMAIN := .Env.XMPP_HIDDEN_DOMAIN | default "hidden.meet.jitsi" -}}
 {{ $DISABLE_DEEP_LINKING  := .Env.DISABLE_DEEP_LINKING | default "false" | toBool -}}
 {{ $DISABLE_POLLS := .Env.DISABLE_POLLS | default "false" | toBool -}}
 {{ $DISABLE_REACTIONS := .Env.DISABLE_REACTIONS | default "false" | toBool -}}
@@ -63,7 +63,6 @@
 {{ $DISABLE_PROFILE := .Env.DISABLE_PROFILE | default "false" | toBool -}}
 {{ $ROOM_PASSWORD_DIGITS := .Env.ROOM_PASSWORD_DIGITS | default "false" -}}
 {{ $WHITEBOARD_ENABLED := or (.Env.WHITEBOARD_COLLAB_SERVER_PUBLIC_URL | default "" | toBool) (.Env.WHITEBOARD_COLLAB_SERVER_URL_BASE | default "" | toBool) }}
-{{ $TESTING_AV1_SUPPORT := .Env.TESTING_AV1_SUPPORT | default "false" | toBool -}}
 
 // Video configuration.
 //
@@ -151,7 +150,7 @@ config.etherpad_base = '{{ $PUBLIC_URL }}/etherpad/p/';
 
 {{ if or $ENABLE_RECORDING $ENABLE_TRANSCRIPTIONS  -}}
 
-config.hiddenDomain = '{{ $XMPP_RECORDER_DOMAIN }}';
+config.hiddenDomain = '{{ $XMPP_HIDDEN_DOMAIN }}';
 {{ end -}}
 
 {{ if $ENABLE_RECORDING -}}
@@ -561,11 +560,6 @@ config.whiteboard = {
 {{ else if .Env.WHITEBOARD_COLLAB_SERVER_URL_BASE -}}
     collabServerBaseUrl: '{{ $PUBLIC_URL }}'
 {{ end -}}
-};
-
-// Testing
-config.testing = {
-    enableAv1Support: {{ $TESTING_AV1_SUPPORT }}
 };
 
 // JaaS support: pre-configure image if JAAS_APP_ID was set.
